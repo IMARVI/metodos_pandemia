@@ -2,12 +2,18 @@ import matplotlib.pylab as plt
 from scipy.integrate import odeint
 import numpy as np
 
+# poblacion
 N = 7_500_000_000
+# numero de infectados
 I = 1
+# suceptibles a infeccion
 S = N - I
+# recuperados
 R = 0
-beta = 0.3  # infection rate
-gamma = 0.05  # recovery rate
+# tasa de infeccion
+beta = 0.3 
+# tasa de recuperacion
+gamma = 0.05
 
 
 def diff(sir, t):
@@ -15,21 +21,16 @@ def diff(sir, t):
     dsdt = - (beta * sir[0] * sir[1])/N
     didt = (beta * sir[0] * sir[1])/N - gamma * sir[1]
     drdt = gamma * sir[1]
-    print (dsdt + didt + drdt)
     dsirdt = [dsdt, didt, drdt]
     return dsirdt
 
+# Condiciones iniciales
+iniciales = (S, I, R)
 
-# initial conditions
-sir0 = (S, I, R)
-
-# time points
+# graficamos puntos
 t = np.linspace(0, 100)
 
-# solve ODE
-# the parameters are, the equations, initial conditions,
-# and time steps (between 0 and 100)
-sir = odeint(diff, sir0, t)
+sir = odeint(diff, iniciales, t)
 
 plt.plot(t, sir[:, 0], label='S(t)')
 plt.plot(t, sir[:, 1], label='I(t)')
